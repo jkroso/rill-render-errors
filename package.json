@@ -1,0 +1,19 @@
+{
+  "name": "rill-render-errors",
+  "version": "0.0.0",
+  "description": "Error rendering middleware for rill",
+  "keywords": ["error","rill","middleware"],
+  "dependencies": {
+    "mana": "jkroso/mana"
+  },
+  "devDependencies": {
+    "future-node": "jkroso/future-node",
+    "serve": "jkroso/serve",
+    "rill": "0"
+  },
+  "transpile": [["*.js", "!sourcegraph/babel->js", {"stage": 0}]],
+  "repository": "git://github.com/jkroso/rill-render-errors.git",
+  "author": "Jake Rosoman",
+  "files": ["index.js"],
+  "license": "MIT"
+}
