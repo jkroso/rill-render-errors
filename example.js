@@ -1,5 +1,5 @@
+import error from './easy'
 import Rill from 'rill'
-import error from './'
 
 const app = new Rill
 

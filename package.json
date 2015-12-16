@@ -7,8 +7,8 @@
     "mana": "jkroso/mana"
   },
   "devDependencies": {
-    "future-node": "jkroso/future-node",
     "serve": "jkroso/serve",
+    "future-node": "0",
     "rill": "0"
   },
   "transpile": [["*.js", "!sourcegraph/babel->js", {"stage": 0}]],
