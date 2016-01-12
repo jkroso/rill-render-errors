@@ -33,7 +33,7 @@ const css = `
   }
 `
 
-export default ({JSX}) => {
+export default ({JSX,debug=false}) => {
   const render = (error, status) =>
     <html>
       <head>
@@ -68,6 +68,7 @@ export default ({JSX}) => {
 
   return ({req, res}, next) =>
     next().catch(e => {
+      if (debug) console.error(e.stack)
       res.status = e.status || 500
       res.set('Content-Type', 'text/html')
       res.body = '<!DOCTYPE html>' + render(e, res.status)
