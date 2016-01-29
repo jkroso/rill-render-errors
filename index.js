@@ -1,37 +1,32 @@
 import {relative, isAbsolute} from 'path'
+import FreeStyle from 'free-style'
+import accepts from 'accepts'
 
-const css = `
-  body {
-    padding: 50px 80px;
-    font: 14px "Helvetica Neue", Helvetica, sans-serif;
-  }
-  h1, h2 {
-    margin: 0;
-    padding: 10px 0;
-  }
-  h1 {
-    font-size: 2em;
-  }
-  h2 {
-    font-size: 1.2em;
-    font-weight: 200;
-    color: #aaa;
-  }
-  ul {
-    padding: 0 3em;
-    list-style: decimal;
-  }
-  .message {
-    padding: 0 1em;
-  }
-  p, li {
-    font: 0.9em monospace;
-    line-height: 1.3;
-  }
-  a {
-    text-decoration: none;
-  }
-`
+const sheet = FreeStyle.create()
+const className = sheet.registerStyle({
+  font: '14px "Helvetica Neue", Helvetica, sans-serif',
+  padding: '50px 80px',
+  'h1, h2': {
+    padding: '10px 0',
+    margin: '0',
+  },
+  'h1': { fontSize: '2em'},
+  'h2': {
+    fontSize: '1.2em',
+    fontWeight: '200',
+    color: '#aaa',
+  },
+  'ul': {
+    padding: '0 3em',
+    listStyle: 'decimal',
+  },
+  '.message': { padding: '0 1em' },
+  'p, li': {
+    font: '0.9em monospace',
+    lineHeight: '1.3'
+  },
+  'a': { textDecoration: 'none' }
+})
 
 export default ({JSX,debug=false}) => {
   const render = (error, status) =>
@@ -39,9 +34,9 @@ export default ({JSX,debug=false}) => {
       <head>
         <title>Error - {status}</title>
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-        <style>{css}</style>
+        <style>{sheet.getStyles()}</style>
       </head>
-      <body>
+      <body className>
         <h1>Error</h1>
         {process.env.NODE_ENV != 'production' ? ErrorInfo(error) : null}
       </body>
@@ -70,7 +65,14 @@ export default ({JSX,debug=false}) => {
     next().catch(e => {
       if (debug) console.error(e.stack)
       res.status = e.status || 500
-      res.set('Content-Type', 'text/html')
-      res.body = '<!DOCTYPE html>' + render(e, res.status)
+      switch (accepts(req).type('text/plain', 'text/html')) {
+        case 'text/html':
+          res.set('Content-Type', 'text/html')
+          res.body = '<!DOCTYPE html>' + render(e, res.status)
+          break
+        default:
+          res.set('Content-Type', 'text/plain')
+          res.body = e.stack
+      }
     })
 }

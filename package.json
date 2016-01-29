@@ -4,7 +4,9 @@
   "description": "Error rendering middleware for rill",
   "keywords": ["error","rill","middleware"],
   "dependencies": {
-    "mana": "jkroso/mana"
+    "mana": "jkroso/mana",
+    "free-style": "1",
+    "accepts": "1"
   },
   "devDependencies": {
     "serve": "jkroso/serve",
